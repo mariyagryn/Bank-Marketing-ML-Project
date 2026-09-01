@@ -118,3 +118,29 @@ Possible improvements:
 - handle class imbalance;
 - create additional behavioral features;
 - train models without potentially leakage-prone features such as duration.
+  
+## Model Performance Comparison
+
+Different classification models were trained and evaluated using the ROC-AUC metric.
+
+The ROC-AUC metric was selected because the task is a binary classification problem with an imbalanced target variable.
+
+| Model | Hyperparameters | Train ROC-AUC | Validation ROC-AUC | Comment |
+|---|---|---|---|---|
+| XGBoost + RandomizedSearchCV | Optimized parameters | 0.9657 | 0.9560 | Best result after hyperparameter tuning. The model demonstrates strong performance and good generalization. |
+| XGBoost + Hyperopt | Bayesian Optimization | 0.9657 | 0.9560 | Similar result to RandomizedSearchCV, confirming the stability of the optimized model. |
+| XGBoost | Default parameters | 0.9651 | 0.9494 | Strong nonlinear model with good predictive performance. |
+| Logistic Regression | Default parameters | 0.9349 | 0.9429 | Good baseline model. It is simple and interpretable, but cannot capture complex nonlinear relationships. |
+| kNN | n_neighbors = 5 | 0.9622 | 0.8774 | Lower validation performance because distance-based methods are sensitive to the structure and scaling of data. |
+| Decision Tree | Default parameters | 1.0000 | 0.7402 | The model shows signs of overfitting because it perfectly fits the training data but performs significantly worse on validation data. |
+
+### Final Model Selection
+
+Based on the validation ROC-AUC score, the best model is **XGBoost with hyperparameter optimization**.
+
+Two optimization approaches were applied:
+
+- **RandomizedSearchCV from Scikit-learn**
+- **Bayesian Optimization using Hyperopt**
+
+Both approaches achieved almost identical validation ROC-AUC values (~0.956), which indicates that the final model is stable and the selected hyperparameters provide reliable performance.
